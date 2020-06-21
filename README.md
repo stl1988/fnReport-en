@@ -8,3 +8,5 @@ First, open index.html in a plaintext editor of your choice. In order to use thi
 Next, open index.html in your web browser and put ?user=YourEpicAccountName (replace YourEpicAccountName with your Epic account name) at the end of what is in your address bar. It now generates your PDF report which you can archive and print out.
 
 If you don't pass the user argument, 'null' will be used as the Epic account name which works for some reason. Even if you pass an invalid user name, it will work, but it won't create the matches pages.
+
+If your matches page is empty, you either haven't played for a long time or you have set your Fortnite stats to private.
