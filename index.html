@@ -1,0 +1,324 @@
+<html>
+<head>
+	<!-- Scriptquellen hier -->
+<script src="time.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+<script src="http.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.65/pdfmake.js" integrity="sha256-J+l85Q8XyhHTkFns/opB6j+V03G5DGvfa/a2Rokow3k=" crossorigin="anonymous"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.65/vfs_fonts.js" integrity="sha256-UsYCHdwExTu9cZB+QgcOkNzUCTweXr5cNfRlAAtIlPY=" crossorigin="anonymous"></script>
+
+<!--
+<script src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script>
+-->
+
+</head>
+
+
+<body>
+	<script type="text/javascript" charset="utf-8">
+	const urlParams = new URLSearchParams(window.location.search);
+		const pvar = urlParams.get('user');
+		alert(pvar);
+		
+		// Put your fortniteapi.io API key here
+		var apikey = "01234567-89abcdef-01234567-89abcdef";
+		// ------------------------------------
+
+		var datum=date.getTime()/1000;
+		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=en&type=br","Authorization",apikey));
+		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=en&type=stw","Authorization",apikey));
+		var fnuser = JSON.parse(httpGet2("https://fortniteapi.io/lookup?username="+pvar,"Authorization",apikey));
+		if(fnuser.result=true) {
+		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/matches?account="+fnuser.account_id,"Authorization",apikey));
+		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/stats?account="+fnuser.account_id,"Authorization",apikey));
+		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/shop?lang=en","Authorization",apikey));
+		}
+		
+		
+		
+// Cover
+console.log("cover, toc, br news");
+		var inhalt = [
+		
+		{text: "fnReport", fontSize: 75}
+		];
+		if(fnuser.result=true) {
+		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar+" - "+fnuser.account_id+" - en", alignment: 'center'});
+		} else {
+		inhalt.push({text: datum+" - "+timeConverter(datum)+" - "+pvar+" - "+fnuser.error+" - en", alignment: 'center'});
+		}
+		
+		
+		var farbe1='#'+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+		console.log(farbe1);
+		var farbe2='#'+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+		console.log(farbe2);
+		var farbe3='#'+('00000'+(Math.random()*(1<<24)|0).toString(16)).slice(-6);
+		console.log(farbe3);
+		
+		var bildurl1=fnbr.news[0].image;
+		var bild1=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl1);
+		console.log(bildurl1);
+		console.log(bild1);
+		var bildurl2=fnbr.news[1].image;
+		var bild2=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl2);
+		console.log(bildurl2);
+		console.log(bild2);
+		var bildurl3=fnstw.news[0].image;
+		var bild3=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl3); 
+		console.log(bildurl3);
+		console.log(bild3);
+		var bildurl4=fnstw.news[1].image;
+		var bild4=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl4);
+		console.log(bildurl4);
+		console.log(bild4);
+		var bildurl5=fnshop.featured[0].icon;
+		var bild5=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl5);
+		console.log(bildurl5);
+		console.log(bild5);
+		var bildurl6=fnshop.featured[1].icon;
+		var bild6=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl6);
+		console.log(bildurl6);
+		console.log(bild6);
+		
+		inhalt.push(
+		{text: "Made with fortniteapi.io", alignment: 'center'},
+		{text: "______________________________________________________________________________________", alignment: 'center'},
+		{text: " "},
+		{text: " "},
+		
+		{layout: 'noBorders', alignment: 'center',
+		table: {
+		widths: [250,250],
+		body: [
+		[
+		{image: bild1, fillColor: farbe1, width: 245, alignment: 'center'},
+		{image: bild2, fillColor: farbe1, width: 245, alignment: 'center'}
+		],
+		[
+		{image: bild3, fillColor: farbe2, width: 245, alignment: 'center'},
+		{image: bild4, fillColor: farbe2, width: 245, alignment: 'center'}
+		],
+		[
+		{image: bild5, fillColor: farbe3, width: 245, alignment: 'center'},
+		{image: bild6, fillColor: farbe3, width: 245, alignment: 'center'}
+		]
+		
+		]
+		
+		}
+		},
+		
+		
+		// toc
+		{toc: {
+		title: {text: "Table of contents", fontSize: 30},
+		numberStyle: {bold: true}
+		}, pageBreak: 'before'
+		},
+		
+		
+		
+		{text: " "},
+		{text: "Battle Royale News", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: " "}
+		);
+		
+
+		
+		for(i=0;i<fnbr.news.length;i++) {
+		var bildurl=fnbr.news[i].image;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fnbr.news[i].title, fontSize: 20},
+		{text: fnbr.news[i].date+", live: "+fnbr.news[i].live+", AdSpace: "+fnbr.news[i].adspace},
+		{text: " "}
+		);
+		
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Couldn't create image or QR code)"} );
+		}
+		}
+		
+		inhalt.push(
+		{text: " "},
+		{text: fnbr.news[i].body},
+		{text: "______________________________"},
+		{text: " "}
+		);
+		
+		}
+		
+		
+		// stw news
+		console.log("stw news");
+		inhalt.push(
+		{text: " "},
+		{text: "Save The World News", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: " "}
+		);
+		
+		for(i=0;i<fnstw.news.length;i++) {
+		var bildurl=fnstw.news[i].image;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fnstw.news[i].title, fontSize: 20},
+		{text: fnstw.news[i].date+", live: "+fnbr.news[i].live+", AdSpace: "+fnstw.news[i].adspace},
+		{text: " "}
+		);
+		
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Couldn't create image or QR code)"} );
+		}
+		}
+		
+		inhalt.push(
+		{text: " "},
+		{text: fnstw.news[i].body},
+		{text: "______________________________"},
+		{text: " "}
+		);
+		
+		}
+		// map
+		console.log("map");
+		var karte=httpGet("https://helloacm.com/api/image-to-base64/?url=https://media.fortniteapi.io/images/map.png?showPOI=true");
+		console.log(karte);
+		inhalt.push(
+		{text: "Current map (Battle Royale)", pageBreak: 'before', fontSize: 30, alignment: 'center', tocItem: true},
+		{text: " "},
+		{image: karte, width: 500, alignment: 'center'}
+		);
+		
+		//matches
+		if(fnuser.result=true) {
+		console.log("matches");
+		inhalt.push(
+		{text: "Matches played recently", fontSize: 30, pageBreak: 'before', alignment: 'center', tocItem: true},
+		{text: " "}
+		);
+		for(i=0;i<fnmatches.matches.length;i++) {
+		inhalt.push(
+		{text: fnmatches.matches[i].readable_name, fontSize: 20},
+		{text: fnmatches.matches[i].mode+" "+fnmatches.matches[i].platform},
+		{text: fnmatches.matches[i].date},
+		{text: "Played "+fnmatches.matches[i].matchesplayed+" times"},
+		{text: "Played for "+fnmatches.matches[i].minutesplayed+" minutes"},
+		{text: fnmatches.matches[i].kills+" Kills"},
+		{text: fnmatches.matches[i].playersoutlived+" players outlived"},
+		{text: "Score: "+fnmatches.matches[i].score},
+		{text: " "}
+		
+		)
+		}
+		
+		
+		}
+		// shop
+		console.log("shop");
+		inhalt.push(
+		{text: "Daily Shop", alignment: 'center', pageBreak: 'before', fontSize: 30, tocItem: true},
+		{text: " "}
+		);
+		for(i=0;i<fnshop.featured.length;i++) {
+		var bildurl=fnshop.featured[i].icon;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fnshop.featured[i].name, fontSize: 20},
+		{text: fnshop.featured[i].id}
+		);
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Couldn't create image or QR code)"} );
+		}
+		}
+		inhalt.push(
+		{text: fnshop.featured[i].description},
+		{text: " "},
+		{text: "Release: "+fnshop.featured[i].releaseDate},
+		{text: "Last appearance: "+fnshop.featured[i].lastAppearance},
+		{text: "Rarity: "+fnshop.featured[i].rarity+" ("+fnshop.featured[i].internalRarity+")"},
+		{text: "Can buy: "+fnshop.featured[i].buyAllowed+", as a present: "+fnshop.featured[i].giftAllowed},
+		{text: "Price: "+fnshop.featured[i].price+" VBucks ("+fnshop.featured[i].priceNoDiscount+" VBucks)"},
+		{text: "Banner: "+fnshop.featured[i].banner},
+		{text: "Also contains: "},
+		{text: " "}
+		);
+		for(j=0;j<fnshop.featured[i].otherItemsDetails.length;j++) {
+		inhalt.push(
+		{text: fnshop.featured[i].otherItemsDetails[j].name, fontSize: 15},
+		{text: fnshop.featured[i].otherItemsDetails[j].id}
+		);
+		var bildurl=fnshop.featured[i].otherItemsDetails[j].images.icon;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 150} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 150} );
+		} else {
+		inhalt.push( {text: "(Couldn't create image or QR code)"} );
+		}
+		}
+		inhalt.push(
+		{text: fnshop.featured[i].otherItemsDetails[j].description},
+		{text: " "}
+		);
+		}
+		inhalt.push(
+		{text: "_____________________________"},
+		{text: " "}
+		);
+		
+		
+		}
+		
+		
+		
+		
+		
+
+// ------------------------------------------
+
+		var docDefinition = {
+			content: inhalt,
+			header: {text: "fnReport "+datum, alignment: 'center', fontSize: 8},
+			footer: function(currentPage) { return {text: currentPage, alignment: 'center', fontSize: 8}}
+
+		};
+
+		
+		console.log("Generating PDF");
+		pdfMake.createPdf(docDefinition).download("fnReport-"+datum+"-"+pvar+"-en.pdf");
+		console.log("Done.");
+	</script>
+	
+	</body>
+	</html>
