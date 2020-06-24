@@ -26,18 +26,20 @@
 		alert(pvar);
 		
 		// Put your fortniteapi.io API key here
-		var apikey = "01234567-89abcdef-01234567-89abcdef";
+		var apikey = "<API key here>";
 		// ------------------------------------
 
 		var datum=date.getTime()/1000;
 		var fnbr = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=en&type=br","Authorization",apikey));
 		var fnstw = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=en&type=stw","Authorization",apikey));
+		var fncreative = JSON.parse(httpGet2("https://fortniteapi.io/news?lang=en&type=creative","Authorization",apikey));
 		var fnuser = JSON.parse(httpGet2("https://fortniteapi.io/lookup?username="+pvar,"Authorization",apikey));
 		if(fnuser.result=true) {
-		var fnmatches= JSON.parse(httpGet2("https://fortniteapi.io/matches?account="+fnuser.account_id,"Authorization",apikey));
-		var fnstats= JSON.parse(httpGet2("https://fortniteapi.io/stats?account="+fnuser.account_id,"Authorization",apikey));
-		var fnshop= JSON.parse(httpGet2("https://fortniteapi.io/shop?lang=en","Authorization",apikey));
-		}
+		var fnmatches = JSON.parse(httpGet2("https://fortniteapi.io/matches?account="+fnuser.account_id,"Authorization",apikey));
+		var fnstats = JSON.parse(httpGet2("https://fortniteapi.io/stats?account="+fnuser.account_id,"Authorization",apikey));
+                }
+		var fnshop = JSON.parse(httpGet2("https://fortniteapi.io/shop?lang=en","Authorization",apikey));
+	
 		
 		
 		
@@ -177,7 +179,7 @@ console.log("cover, toc, br news");
 		console.log(bild);
 		inhalt.push(
 		{text: fnstw.news[i].title, fontSize: 20},
-		{text: fnstw.news[i].date+", live: "+fnbr.news[i].live+", AdSpace: "+fnstw.news[i].adspace},
+		{text: fnstw.news[i].date+", live: "+fnstw.news[i].live+", AdSpace: "+fnstw.news[i].adspace},
 		{text: " "}
 		);
 		
@@ -199,6 +201,47 @@ console.log("cover, toc, br news");
 		);
 		
 		}
+
+                // creative news
+		console.log("creative news");
+		inhalt.push(
+		{text: " "},
+		{text: "Creative Mode News", fontSize: 30, alignment: 'center', pageBreak: 'before', tocItem: true},
+		{text: " "}
+		);
+		
+		for(i=0;i<fncreative.news.length;i++) {
+		var bildurl=fncreative.news[i].image;
+		var bild=httpGet("https://helloacm.com/api/image-to-base64/?url="+bildurl);
+		console.log(bildurl);
+		console.log(bild);
+		inhalt.push(
+		{text: fncreative.news[i].title, fontSize: 20},
+		{text: fncreative.news[i].date+", aktuell: "+fncreative.news[i].live+", AdSpace: "+fncreative.news[i].adspace},
+		{text: " "}
+		);
+		
+		if(bild!="") {
+		inhalt.push( {image: bild, width: 200} );
+		} else {
+		if(bildurl!="") {
+		inhalt.push( {qr: bildurl, fit: 200} );
+		} else {
+		inhalt.push( {text: "(Konnte kein Bild oder QR-Code erstellen)"} );
+		}
+		}
+		
+		inhalt.push(
+		{text: " "},
+		{text: fncreative.news[i].body},
+		{text: "______________________________"},
+		{text: " "}
+		);
+		
+		}
+
+
+
 		// map
 		console.log("map");
 		var karte=httpGet("https://helloacm.com/api/image-to-base64/?url=https://media.fortniteapi.io/images/map.png?showPOI=true");
