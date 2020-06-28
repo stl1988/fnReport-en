@@ -39,7 +39,7 @@
 		var fnstats = JSON.parse(httpGet2("https://fortniteapi.io/stats?account="+fnuser.account_id,"Authorization",apikey));
                 }
 		var fnshop = JSON.parse(httpGet2("https://fortniteapi.io/shop?lang=en","Authorization",apikey));
-	
+	        var fnchallenges = JSON.parse(httpGet2("https://fortniteapi.io/challenges?season=current&lang=de","Authorization",apikey));
 		
 		
 		
